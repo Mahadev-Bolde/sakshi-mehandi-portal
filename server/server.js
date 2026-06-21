@@ -1,37 +1,54 @@
 import dotenv from "dotenv";
 dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+
 import bookingRoutes from "./routes/bookingRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import seedRoutes from "./routes/seedRoutes.js";
 import galleryRoutes from "./routes/galleryRoutes.js";
-
 import connectDB from "./config/db.js";
 
 connectDB();
 
 const app = express();
 
-app.use(express.json());
-app.use(cookieParser());
-
 const allowedOrigins = [
-  "https://sakshi-mehandi-portal-frontend.onrender.com",
   "http://localhost:5173",
+  "https://sakshi-mehandi-portal-frontend.onrender.com",
 ];
 
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  }),
-);
+const corsOptions = {
+  origin: (origin, callback) => {
+    console.log("Request origin:", origin);
 
-// Keep this only if you still use local uploads anywhere.
-// Cloudinary gallery images do not need this.
+    // Requests from browser will have an origin.
+    // Postman/server requests may not have one.
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+
+app.use(express.json());
+app.use(cookieParser());
+app.get("/api/test-cors", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "CORS is working",
+  });
+});
+
 app.use("/uploads", express.static("uploads"));
 
 app.use("/api/bookings", bookingRoutes);
