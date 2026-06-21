@@ -18,14 +18,18 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+const allowedOrigins = [
+  "https://sakshi-mehandi-portal-frontend.onrender.com",
+  "http://localhost:5173",
+];
+
 app.use(
   cors({
-    origin:
-      "https://sakshi-mehandi-portal-frontend.onrender.com" ||
-      "http://localhost:5173",
+    origin: allowedOrigins,
     credentials: true,
   }),
 );
+app.options("*", cors());
 
 // Keep this only if you still use local uploads anywhere.
 // Cloudinary gallery images do not need this.
