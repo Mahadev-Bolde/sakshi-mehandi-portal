@@ -10,9 +10,9 @@ import Footer from "./Components/Footer";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import AdminRoute from "./components/AdminRoute";
+import AdminRoute from "./Components/AdminRoute.jsx";
 import AdminDashboard from "./pages/AdminDashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 
 const App = () => {
   return (
