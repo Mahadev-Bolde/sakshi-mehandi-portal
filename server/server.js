@@ -29,7 +29,6 @@ app.use(
     credentials: true,
   }),
 );
-app.options("*", cors());
 
 // Keep this only if you still use local uploads anywhere.
 // Cloudinary gallery images do not need this.
