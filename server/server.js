@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin:
-      "https://sakshi-mehandi-portal-frontend.onrender.com/" ||
+      "https://sakshi-mehandi-portal-frontend.onrender.com" ||
       "http://localhost:5173",
     credentials: true,
   }),
