@@ -1,0 +1,37 @@
+@import "tailwindcss";
+@source "./src/**/*.{js,ts,jsx,tsx}";
+
+@theme {
+  --color-gold: #C9A96E;
+  --color-burgundy: #6B1D2F;
+  --color-ivory: #FDF8F0;
+  --color-charcoal: #2C2C2C;
+  --color-terracotta: #C87A5A;
+  --color-sage: #A3B18A;
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+/* Premium Utility Classes */
+.btn-gold {
+  background: linear-gradient(135deg, #C9A96E 0%, #B8944F 100%);
+  color: #2C2C2C;
+  transition: all 0.3s ease;
+}
+.btn-gold:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px -8px rgba(201, 169, 110, 0.5);
+}
+
+.hero-gradient {
+  background: radial-gradient(circle at 70% 30%, #FDF8F0 0%, #F0E3D6 100%);
+}
+
+.gold-border-bottom {
+  border-bottom: 3px solid #C9A96E;
+}
+
+/* Smooth scroll for anchor links */
+html {
+  scroll-behavior: smooth;
+}
