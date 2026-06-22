@@ -6,52 +6,27 @@ import { sendMail } from "../utils/sendMail.js";
 -------------------------------- */
 export const createBooking = async (req, res) => {
   try {
+    console.log("1. Booking request received");
+    console.log("2. User:", req.user?.id);
+    console.log("3. Request body:", req.body);
+
     const booking = await Booking.create({
       ...req.body,
       user: req.user.id,
       status: "Pending",
     });
 
-    // Return response immediately so frontend does not wait for email
-    res.status(201).json({
+    console.log("4. Booking saved successfully:", booking._id);
+
+    return res.status(201).json({
       success: true,
-      message: "Booking request submitted successfully",
+      message: "Booking created successfully",
       booking,
     });
-
-    // Send email ONLY to admin in background
-    sendMail({
-      to: process.env.EMAIL_USER,
-      subject: "New Mehendi Booking Received",
-      html: `
-        <div style="font-family:Arial,sans-serif;padding:20px;">
-          <h2>New Booking Received</h2>
-
-          <h3>Customer Details</h3>
-          <p><b>Name:</b> ${booking.name}</p>
-          <p><b>Email:</b> ${booking.email}</p>
-          <p><b>Phone:</b> ${booking.phone}</p>
-
-          <hr />
-
-          <h3>Booking Details</h3>
-          <p><b>Service:</b> ${booking.service}</p>
-          <p><b>Date:</b> ${booking.date}</p>
-          <p><b>Time:</b> ${booking.time}</p>
-          <p><b>Message:</b> ${booking.message || "No special request"}</p>
-
-          <p>Please open the admin dashboard and confirm or cancel this booking.</p>
-        </div>
-      `,
-    })
-      .then(() => console.log("Admin booking email sent"))
-      .catch((err) =>
-        console.error("Admin booking email failed:", err.message),
-      );
   } catch (error) {
-    console.error("Create booking error:", error);
+    console.error("BOOKING ERROR:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message || "Failed to create booking",
     });

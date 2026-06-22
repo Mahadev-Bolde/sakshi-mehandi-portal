@@ -12,8 +12,6 @@ import seedRoutes from "./routes/seedRoutes.js";
 import galleryRoutes from "./routes/galleryRoutes.js";
 import connectDB from "./config/db.js";
 
-connectDB();
-
 const app = express();
 
 const allowedOrigins = [
@@ -62,6 +60,17 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server Running On Port ${PORT}`);
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`Server Running On Port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
