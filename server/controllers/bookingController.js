@@ -6,83 +6,48 @@ import { sendMail } from "../utils/sendMail.js";
 -------------------------------- */
 export const createBooking = async (req, res) => {
   try {
-    console.log("Creating booking...");
-
     const booking = await Booking.create({
       ...req.body,
       user: req.user.id,
       status: "Pending",
     });
 
-    console.log("Booking created:", booking._id);
-
-    // Send response FIRST — do not wait for emails
+    // Return response immediately so frontend does not wait for email
     res.status(201).json({
       success: true,
-      message: "Booking created successfully",
+      message: "Booking request submitted successfully",
       booking,
     });
 
-    // Admin email in background
+    // Send email ONLY to admin in background
     sendMail({
       to: process.env.EMAIL_USER,
-      subject: "🎉 New Mehendi Booking Received",
+      subject: "New Mehendi Booking Received",
       html: `
-        <div style="font-family: Arial, sans-serif; background:#f6f6f6; padding:20px;">
-          <div style="max-width:600px;margin:auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
-            <div style="background:#111827;color:#fff;padding:20px;text-align:center;">
-              <h2 style="margin:0;">New Booking Received 🎉</h2>
-              <p style="margin:5px 0 0;font-size:13px;color:#d1d5db;">Mehendi Booking Dashboard</p>
-            </div>
+        <div style="font-family:Arial,sans-serif;padding:20px;">
+          <h2>New Booking Received</h2>
 
-            <div style="padding:20px;">
-              <h3>Customer Details</h3>
-              <p><b>Name:</b> ${booking.name}</p>
-              <p><b>Email:</b> ${booking.email}</p>
-              <p><b>Phone:</b> ${booking.phone}</p>
+          <h3>Customer Details</h3>
+          <p><b>Name:</b> ${booking.name}</p>
+          <p><b>Email:</b> ${booking.email}</p>
+          <p><b>Phone:</b> ${booking.phone}</p>
 
-              <hr />
+          <hr />
 
-              <p><b>Service:</b> ${booking.service}</p>
-              <p><b>Date:</b> ${booking.date}</p>
-              <p><b>Time:</b> ${booking.time}</p>
-
-              <hr />
-
-              <p><b>Message:</b> ${booking.message || "N/A"}</p>
-            </div>
-          </div>
-        </div>
-      `,
-    })
-      .then(() => console.log("Admin email sent"))
-      .catch((err) => console.error("Admin email failed:", err.message));
-
-    // Customer pending email in background
-    sendMail({
-      to: booking.email,
-      subject: "🎉 We Received Your Mehendi Booking",
-      html: `
-        <div style="font-family:Arial;padding:20px;">
-          <h2>Thank you for your booking 💚</h2>
-
-          <p>Hi ${booking.name},</p>
-
-          <p>Your booking is <b>pending confirmation</b>.</p>
-
-          <h3>📌 Details</h3>
+          <h3>Booking Details</h3>
           <p><b>Service:</b> ${booking.service}</p>
           <p><b>Date:</b> ${booking.date}</p>
           <p><b>Time:</b> ${booking.time}</p>
+          <p><b>Message:</b> ${booking.message || "No special request"}</p>
 
-          <p>We will confirm you shortly.</p>
-
-          <p>– Sakshi Mehendi Team</p>
+          <p>Please open the admin dashboard and confirm or cancel this booking.</p>
         </div>
       `,
     })
-      .then(() => console.log("Customer pending email sent"))
-      .catch((err) => console.error("Customer email failed:", err.message));
+      .then(() => console.log("Admin booking email sent"))
+      .catch((err) =>
+        console.error("Admin booking email failed:", err.message),
+      );
   } catch (error) {
     console.error("Create booking error:", error);
 
@@ -138,36 +103,43 @@ export const updateBookingStatus = async (req, res) => {
       });
     }
 
+    const oldStatus = booking.status;
     booking.status = status;
     await booking.save();
 
-    // Send API response FIRST
+    // Respond immediately — do not make frontend wait for email
     res.status(200).json({
       success: true,
+      message: "Booking status updated successfully",
       booking,
     });
+
+    // Do not send duplicate email if admin clicks same status again
+    if (oldStatus === status) return;
 
     if (status === "Confirmed") {
       sendMail({
         to: booking.email,
-        subject: "🎉 Your Mehendi Booking is Confirmed!",
+        subject: "Your Mehendi Booking is Confirmed",
         html: `
-          <div style="font-family:Arial;padding:20px;">
-            <h2 style="color:green;">Booking Confirmed 💚</h2>
-            <p>Hi ${booking.name},</p>
-            <p>Your booking is <b>confirmed</b>.</p>
+          <div style="font-family:Arial,sans-serif;padding:20px;">
+            <h2 style="color:green;">Booking Confirmed</h2>
 
-            <h3>📅 Details</h3>
+            <p>Hi ${booking.name},</p>
+
+            <p>Your mehendi booking has been <b>confirmed</b>.</p>
+
+            <h3>Booking Details</h3>
             <p><b>Service:</b> ${booking.service}</p>
             <p><b>Date:</b> ${booking.date}</p>
             <p><b>Time:</b> ${booking.time}</p>
 
-            <p>We look forward to serving you 💛</p>
-            <p>– Sakshi Mehendi Team</p>
+            <p>We look forward to serving you.</p>
+            <p>— Sakshi Mehendi Team</p>
           </div>
         `,
       })
-        .then(() => console.log("Confirmation email sent"))
+        .then(() => console.log("Confirmation email sent to user"))
         .catch((err) =>
           console.error("Confirmation email failed:", err.message),
         );
@@ -176,18 +148,26 @@ export const updateBookingStatus = async (req, res) => {
     if (status === "Cancelled") {
       sendMail({
         to: booking.email,
-        subject: "❌ Your Mehendi Booking is Cancelled",
+        subject: "Update on Your Mehendi Booking",
         html: `
-          <div style="font-family:Arial;padding:20px;">
-            <h2 style="color:red;">Booking Cancelled ❌</h2>
+          <div style="font-family:Arial,sans-serif;padding:20px;">
+            <h2 style="color:#b91c1c;">Booking Cancelled</h2>
+
             <p>Hi ${booking.name},</p>
-            <p>Your booking has been cancelled.</p>
-            <p>If this is unexpected, contact us.</p>
-            <p>– Sakshi Mehendi Team</p>
+
+            <p>Unfortunately, your mehendi booking has been <b>cancelled</b>.</p>
+
+            <h3>Booking Details</h3>
+            <p><b>Service:</b> ${booking.service}</p>
+            <p><b>Date:</b> ${booking.date}</p>
+            <p><b>Time:</b> ${booking.time}</p>
+
+            <p>If you have questions, please contact us.</p>
+            <p>— Sakshi Mehendi Team</p>
           </div>
         `,
       })
-        .then(() => console.log("Cancellation email sent"))
+        .then(() => console.log("Cancellation email sent to user"))
         .catch((err) =>
           console.error("Cancellation email failed:", err.message),
         );
@@ -197,7 +177,7 @@ export const updateBookingStatus = async (req, res) => {
 
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message || "Failed to update booking status",
     });
   }
 };
