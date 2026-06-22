@@ -25,8 +25,6 @@ const corsOptions = {
   origin: (origin, callback) => {
     console.log("Request origin:", origin);
 
-    // Requests from browser will have an origin.
-    // Postman/server requests may not have one.
     if (!origin || allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
@@ -35,13 +33,14 @@ const corsOptions = {
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
 };
 
 app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser());
+
 app.get("/api/test-cors", (req, res) => {
   res.status(200).json({
     success: true,

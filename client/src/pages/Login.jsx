@@ -20,7 +20,6 @@ const Login = () => {
 
     try {
       setLoading(true);
-
       const response = await API.post("/auth/login", {
         email: email.trim().toLowerCase(),
         password,
