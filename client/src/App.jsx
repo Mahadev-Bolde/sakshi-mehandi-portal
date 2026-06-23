@@ -2,14 +2,7 @@ import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 const Home = lazy(() => import("./pages/Home"));
 const Services = lazy(() => import("./pages/Services"));
-const Gallary = lazy(
-  () =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(import("./pages/Gallary"));
-      }, 3000);
-    }),
-);
+const Gallary = lazy(() => import("./pages/Gallary"));
 const Booking = lazy(() => import("./pages/Booking"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Signup = lazy(() => import("./pages/Signup"));
