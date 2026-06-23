@@ -1,7 +1,9 @@
 @import "tailwindcss";
 @source "./src/**/*.{js,ts,jsx,tsx}";
 
+
 @theme {
+  /* Existing custom properties */
   --color-gold: #C9A96E;
   --color-burgundy: #6B1D2F;
   --color-ivory: #FDF8F0;
@@ -10,6 +12,10 @@
   --color-sage: #A3B18A;
   --font-serif: "Playfair Display", serif;
   --font-sans: "Inter", sans-serif;
+
+  /* ✅ Add this line for your custom `xs` breakpoint */
+  --breakpoint-xs: 400px;
+
 }
 
 /* Premium Utility Classes */

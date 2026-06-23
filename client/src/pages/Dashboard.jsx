@@ -44,6 +44,9 @@ const Dashboard = () => {
 
   return (
     <section className="min-h-screen bg-ivory pt-24 sm:pt-28 pb-8 px-4 xs:px-3 sm:px-6 md:px-8 lg:px-10">
+      <div className="bg-black text-white p-4 xs:bg-red-500 sm:bg-blue-500 md:bg-green-500 lg:bg-yellow-500">
+        Resize me – colors change at breakpoints!
+      </div>
       <div className="max-w-7xl mx-auto w-full">
         {/* Welcome Card */}
         <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg p-4 xs:p-5 sm:p-7 md:p-8">
