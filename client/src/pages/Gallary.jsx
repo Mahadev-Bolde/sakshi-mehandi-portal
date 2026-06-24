@@ -14,14 +14,14 @@ import { filterOptions } from "../constants/galleryConstants";
 import useGallery from "../hooks/useGallery";
 
 import toast from "react-hot-toast";
-import GalleryHeader from "../components/Gallery/GalleryHeader";
-import GalleryFilters from "../components/Gallery/GalleryFilters";
+import GalleryHeader from "../Components/Gallery/GalleryHeader";
+import GalleryFilters from "../Components/Gallery/GalleryFilters";
 const GalleryLightbox = lazy(
-  () => import("../components/Gallery/GalleryLightbox"),
+  () => import("../Components/Gallery/GalleryLightbox"),
 );
-import DeleteImageModal from "../components/Gallery/DeleteImageModal";
-import GalleryGrid from "../components/Gallery/GalleryGrid";
-import GallerySkeleton from "../components/Gallery/GallerySkeleton";
+import DeleteImageModal from "../Components/Gallery/DeleteImageModal";
+import GalleryGrid from "../Components/Gallery/GalleryGrid";
+import GallerySkeleton from "../Components/Gallery/GallerySkeleton";
 
 const Gallery = () => {
   const { user } = useAuth();
