@@ -1,7 +1,6 @@
-// servicesData.js
 import service1 from "./service4.webp";
-import service2 from "./service2.jpg";
-import service3 from "./service3.jpg";
+import service2 from "./service2.webp";
+import service3 from "./service3.webp";
 
 export const services = [
   {

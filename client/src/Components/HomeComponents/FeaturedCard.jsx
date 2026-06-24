@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Mehendi1 from "../../assets/mehendi1.jpg"; // 👈 Pexels bridal mehendi image
-import Mehendi2 from "../../assets/mehendi2.jpg"; // 👈 Pexels bridal mehendi image
-import Mehendi3 from "../../assets/mehendi3.jpg"; // 👈 Pexels bridal mehendi image
-import Mehendi4 from "../../assets/mehendi4.jpg"; // 👈 Pexels bridal mehendi image
+import Mehendi1 from "../../assets/mehendi1.webp"; // 👈 Pexels bridal mehendi image
+import Mehendi2 from "../../assets/mehendi2.webp"; // 👈 Pexels bridal mehendi image
+import Mehendi3 from "../../assets/mehendi3.webp"; // 👈 Pexels bridal mehendi image
+import Mehendi4 from "../../assets/mehendi4.webp"; // 👈 Pexels bridal mehendi image
 
 // Data Arrays with Images
 const designs = [
@@ -59,6 +59,7 @@ const FeaturedCard = () => {
               <img
                 src={item.image}
                 alt={item.name}
+                loading="lazy"
                 className="w-full h-full object-cover transition-transform group-hover:scale-110"
                 onError={(e) => {
                   // Fallback if image fails to load

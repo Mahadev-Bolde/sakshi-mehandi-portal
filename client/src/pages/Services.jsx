@@ -182,6 +182,8 @@ const Services = () => {
                 <img
                   src={service.image}
                   alt={service.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
                   onError={(e) => {
                     e.target.onerror = null;
