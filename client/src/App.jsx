@@ -18,7 +18,12 @@ const App = () => {
   return (
     <div>
       <Navbar />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense
+        fallback={
+          <div className="h-screen w-full flex items-center justify-center">
+            <div className="h-15 w-15 rounded-full border-t-2 border-[#B8944F] animate-spin"></div>
+          </div>
+        }>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services />} />
